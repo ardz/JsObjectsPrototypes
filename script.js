@@ -1,37 +1,29 @@
-function display() {
-    for (var i = 0; i < arguments.length; i++) {
-      if (typeof arguments[i] === 'object') 
-        displayObject(arguments[i])
-      else
-        displayValue(arguments[i], true)
-    }
-  }
-  
-  function displayObject(object) {
-    if (object == null)
-      displayValue('null')
-    displayValue(getTypeName(object) + ' {')
-    for(var propertyName in object) {
-      if (propertyName != 'constructor') {
-        displayValue(propertyName + ': ' + object[propertyName], false, true);
-      }
-    }
-    displayValue('}', true)
-  }
-  
-  function displayValue(value, addMargin, addPadding) {
-    var div = document.createElement('div');
-    div.style.fontSize='32px'
-    if (addMargin)
-      div.style.marginBottom='30px'
-    if (addPadding)
-      div.style.paddingLeft='30px'
-    div.textContent = value;
-    document.body.appendChild(div)
-  }
-  
-  function getTypeName(object) {
-     var funcNameRegex = /function (.{1,})\(/;
-     var results = (funcNameRegex).exec(object.constructor.toString());
-     return (results && results.length > 1) ? results[1] : "";
-  }
+'use strict';
+
+var dog = {
+  name: {first: 'Snoopy', last: 'Pelusa' },
+  color: 'White'
+};
+
+//for...in
+for(var propertyName in dog) {
+  display(propertyName);
+}
+
+display('Now I can see the property value');
+for(var propertyName in dog) {
+  display(propertyName +' value = ' + dog[propertyName]);
+}
+
+display(JSON.stringify(dog));
+display('Now name is not enumerable');
+//Let's make enumerable property: false for dog name.
+Object.defineProperty(dog, 'name', {enumerable: false});
+for(var propertyName in dog) {
+  display(propertyName +' value = ' + dog[propertyName]);
+}
+
+display(Object.keys(dog));
+display(dog);
+display(dog.name);
+display(JSON.stringify(dog));
